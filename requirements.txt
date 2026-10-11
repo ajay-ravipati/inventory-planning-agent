@@ -1,0 +1,15 @@
+streamlit
+langgraph
+langchain
+langchain-core
+langchain-google-genai
+langchain-community
+pandas
+numpy
+chromadb
+sentence-transformers
+ragas
+datasets
+python-dotenv
+instructor[google-genai]
+google-genai
