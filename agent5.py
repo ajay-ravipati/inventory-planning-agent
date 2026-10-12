@@ -18,13 +18,10 @@ from langgraph.prebuilt import ToolNode, tools_condition
 
 load_dotenv()
 
-# --------------------------------------------------------------
+# 
 # 0. System Prompt
-# --------------------------------------------------------------
-# NOTE the added "Scope" section at the top — this is option 1 (soft
-# scoping via the system prompt). It's combined with a hard guard node
-# below (option 2) for defense in depth: the prompt handles the common
-# case cheaply, the guard node catches anything that gets past it.
+# 
+
 SYSTEM_PROMPT = """You are an inventory operations assistant for a retail clothes seller and it's warehouse team.
 
 Scope:
@@ -94,10 +91,7 @@ Respond with EXACTLY one word:
 
 Answer with exactly one word: IN_SCOPE or OUT_OF_SCOPE."""
 
-# How many recent turns (one turn = one human or AI message) to show the
-# guard. Small on purpose: enough to resolve a follow-up like "what about
-# them?", not so much that the guard call gets slow/expensive or ends up
-# reasoning over the whole conversation the way the main chatbot does.
+
 GUARD_CONTEXT_TURNS = 6
 
 REFUSAL_MESSAGE = (
@@ -110,12 +104,7 @@ REFUSAL_MESSAGE = (
 # 1. & 2. & 3. & 4. Tools
 # --------------------------------------------------------------
 
-# Cache of distinct column values (e.g. actual Product_Name / Colour values
-# present in the data), so we can validate filter params against what's
-# really in the database instead of hardcoding a list that could drift out
-# of sync as products are added/removed. Populated lazily, same pattern as
-# the Chroma client/collection caching below.
-_distinct_values_cache = {}
+
 
 
 def _get_distinct_values(column: str):
@@ -337,11 +326,7 @@ tools = [get_reorder_recommendations, get_low_stock_items, query_inventory_db, s
 
 api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
-# Gemini model aliases get retired frequently (1.5-flash, 2.0-flash and
-# 2.0-flash-lite have all been shut down as of mid-2026). Pull the model
-# name from an env var with a current default so a future retirement is a
-# config change, not a code edit. Check
-# https://ai.google.dev/gemini-api/docs/deprecations for the live list.
+
 MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 
 llm = ChatGoogleGenerativeAI(
